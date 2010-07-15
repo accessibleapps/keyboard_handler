@@ -88,6 +88,7 @@ class WXKeyboardHandler (KeyboardHandler):
 
 
 class WXPanelKeyboardHandler (KeyboardHandler):
+ import wx
 
  def create_capturer (self, target):
   #Creates a keyboard capturer control on the given target and binds this handler to it.
