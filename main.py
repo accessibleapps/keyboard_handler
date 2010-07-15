@@ -27,7 +27,8 @@ class KeyboardHandler (object):
   try:
    function = self.active_keys[key]
   except KeyError:
-   pass
+   return
+  return function()
 
 class KeyboardHandlerError (Exception): pass
 
