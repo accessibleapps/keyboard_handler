@@ -14,12 +14,12 @@ class OSXKeyboardHandler(KeyboardHandler):
 
  def __init__(self):
   super(OSXKeyboardHandler, self).__init__()
-  self.app = self.setup_app()
+  self.app = setup_app()
   self._event_thread = Thread(target=AppHelper.runEventLoop)
   self._event_thread.start()
 
  @classmethod
- def setup_app(cls):
+ def setup_app():
   return KeyboardCapturingNSApplication()
 
  def register_key (self, key, function):
