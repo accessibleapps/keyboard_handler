@@ -14,6 +14,7 @@ class OSXKeyboardHandler(KeyboardHandler):
 
  def __init__(self):
   super(OSXKeyboardHandler, self).__init__()
+  self.replacement_keys = dict()
   self.app = KeyboardCapturingNSApplication.alloc().init()
   self._event_thread = Thread(target=AppHelper.runEventLoop)
   self._event_thread.start()
