@@ -1,3 +1,5 @@
+import platform
+
 class KeyboardHandler(object):
 
  def __init__(self):
@@ -28,8 +30,9 @@ class KeyboardHandler(object):
 class KeyboardHandlerError (Exception): pass
 
 class WindowsKeyboardHandler(KeyboardHandler):
- win32api = __import__('win32api')
- win32con = __import__('win32con')
+ if sys.platform() == 'Windows':
+  win32api = __import__('win32api')
+  win32con = __import__('win32con')
 
  def __init__ (self):
   self.replacement_keys = dict(pageup=self.win32con.VK_PRIOR, pagedown=self.win32con.VK_NEXT)
