@@ -28,16 +28,16 @@ class KeyboardHandler (object):
 class KeyboardHandlerError (Exception): pass
 
 class WindowsKeyboardHandler(KeyboardHandler):
- import win32api
- import win32con
+ win32api = __import__('win32api')
+ win32con = __import__('win32con')
 
  def __init__ (self):
-  self.replacement_keys = {"pageup":win32con.VK_PRIOR, "pagedown":win32con.VK_NEXT}
+  self.replacement_keys = dict(pageup=self.win32con.VK_PRIOR, pagedown=self.win32con.VK_NEXT)
   super(WindowsKeyboardHandler, self).__init__()
 
 
 class WXKeyboardHandler(WindowsKeyboardHandler):
- import wx
+ wx = __import__("wx")
 
  def __init__ (self, frame):
   super(WXKeyboardHandler, self).__init__()
@@ -93,12 +93,12 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
 
 
 class WXPanelKeyboardHandler(WindowsKeyboardHandler):
- import wx
+ wx = __import__('wx')
 
  def create_capturer (self, target):
   #Creates a keyboard capturer control on the given target and binds this handler to it.
-  self.capturer = wx.StaticText(parent=target, style=wx.WANTS_CHARS)
-  self.capturer.Bind(wx.EVT_CHAR, self.handle_key_evt)
+  self.capturer = self.wx.StaticText(parent=target, style=self.wx.WANTS_CHARS)
+  self.capturer.Bind(self.wx.EVT_CHAR, self.handle_key_evt)
   self.capturer.SetFocus()
 
  def handle_key_evt (self, evt):
