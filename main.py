@@ -1,13 +1,8 @@
-import win32api
-import win32con
-import wx
-
 class KeyboardHandler (object):
 
- def __init__ (self):
+ def __init__(self):
   self.active_keys = {}
   self.replacement_mods = {}
-  self.replacement_keys = {"pageup":win32con.VK_PRIOR, "pagedown":win32con.VK_NEXT}
 
  def register_key (self, key, function):
   if key in self.active_keys:
@@ -32,7 +27,16 @@ class KeyboardHandler (object):
 
 class KeyboardHandlerError (Exception): pass
 
-class WXKeyboardHandler (KeyboardHandler):
+class WindowsKeyboardHandler(KeyboardHandler):
+ import win32api
+ import win32con
+
+ def __init__ (self):
+  self.replacement_keys = {"pageup":win32con.VK_PRIOR, "pagedown":win32con.VK_NEXT}
+  super(WindowsKeyboardHandler, self).__init__()
+
+
+class WXKeyboardHandler(WindowsKeyboardHandler):
  import wx
 
  def __init__ (self, frame):
@@ -88,7 +92,7 @@ class WXKeyboardHandler (KeyboardHandler):
   return [mods, key[-1]]
 
 
-class WXPanelKeyboardHandler (KeyboardHandler):
+class WXPanelKeyboardHandler(WindowsKeyboardHandler):
  import wx
 
  def create_capturer (self, target):
@@ -106,4 +110,5 @@ class WXPanelKeyboardHandler (KeyboardHandler):
   else:
    key = chr(key)
   self.handle_key(key)
+
 
