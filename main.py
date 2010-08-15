@@ -30,7 +30,7 @@ class KeyboardHandler(object):
 class KeyboardHandlerError (Exception): pass
 
 class WindowsKeyboardHandler(KeyboardHandler):
- if sys.platform() == 'Windows':
+ if platform.system() == 'Windows':
   win32api = __import__('win32api')
   win32con = __import__('win32con')
 
