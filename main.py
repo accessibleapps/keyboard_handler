@@ -1,4 +1,4 @@
-class KeyboardHandler (object):
+class KeyboardHandler(object):
 
  def __init__(self):
   self.active_keys = {}
