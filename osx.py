@@ -19,7 +19,7 @@ class OSXKeyboardHandler(KeyboardHandler):
   self._event_thread.start()
 
  @classmethod
- def setup_app():
+ def setup_app(cls):
   return KeyboardCapturingNSApplication()
 
  def register_key (self, key, function):
