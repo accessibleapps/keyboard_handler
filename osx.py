@@ -20,7 +20,8 @@ class OSXKeyboardHandler(KeyboardHandler):
 
  def register_key (self, key, function):
   super(OSXKeyboardHandler, self).register_key(key, function)
-  key_id = RegisterEventHotKey(*self.parse_key(key), (0, 0), GetApplicationEventTarget(), 0)
+  k, m = self.parse_key(key)
+  key_id = RegisterEventHotKey(k, m, (0, 0), GetApplicationEventTarget(), 0)
   self.key_ids[key] = key_id
 
  def unregister_key (self, key, function):
