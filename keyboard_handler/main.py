@@ -3,8 +3,12 @@ import platform
 class KeyboardHandler(object):
 
  def __init__(self):
+  super(KeyboardHandler, self).__init__()
   self.active_keys = {}
-  self.replacement_mods = {}
+  if not hasattr(self, 'replacement_mods'):
+   self.replacement_mods = {}
+  if not hasattr(self, 'replacement_keys'):
+   self.replacement_keys = {}
 
  def register_key (self, key, function):
   if key in self.active_keys:
@@ -35,9 +39,8 @@ class WindowsKeyboardHandler(KeyboardHandler):
   win32con = __import__('win32con')
 
  def __init__ (self):
-  self.replacement_keys = dict(pageup=self.win32con.VK_PRIOR, pagedown=self.win32con.VK_NEXT)
   super(WindowsKeyboardHandler, self).__init__()
-
+  self.replacement_keys = dict(pageup=self.win32con.VK_PRIOR, pagedown=self.win32con.VK_NEXT)
 
 class WXKeyboardHandler(WindowsKeyboardHandler):
  wx = __import__("wx")
