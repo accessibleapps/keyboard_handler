@@ -1,3 +1,3 @@
 from main import KeyboardHandler, KeyboardHandlerError
-from wx import WXKeyboardHandler, WXPanelKeyboardHandler
+from wx_handler import WXKeyboardHandler, WXPanelKeyboardHandler
 __all__ = ["KeyboardHandler", "KeyboardHandlerError", "WXKeyboardHandler", "WXPanelKeyboardHandler"]

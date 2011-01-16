@@ -33,13 +33,3 @@ class KeyboardHandler(object):
    return
   return function()
 
-
-class WindowsKeyboardHandler(KeyboardHandler):
-
- def __init__ (self):
-  if platform.system() == 'Windows':
-   self.win32api = __import__('win32api')
-   self.win32con = __import__('win32con')
-  super(WindowsKeyboardHandler, self).__init__()
-  self.replacement_keys = dict(pageup=self.win32con.VK_PRIOR, pagedown=self.win32con.VK_NEXT)
-
