@@ -26,6 +26,10 @@ class KeyboardHandler(object):
   except KeyError:
    raise KeyboardHandlerError, "Key %s not currently registered"
 
+ def unregister_hotkeys(self):
+  for key in self.active_keys:
+   self.unregister_hotkey(k, self.active_keys[k])
+
  def handle_key (self, key):
   try:
    function = self.active_keys[key]
@@ -33,21 +37,12 @@ class KeyboardHandler(object):
    return
   return function()
 
- @staticmethod
- def standardize_key(key):
-  """Takes a keystroke and places it in a standard case and order in a list."""
-  working = key.split('+')
-  working = [i.lower() for i in working]
-  answer = []
-  if "control" in working:
-   answer.append("control")
-  if "win" in working:
-   answer.append("win")
-  if "alt" in working:
-   answer.append("alt")
-  if "shift" in working:
-   answer.append("shift")
-  if working[-1] not in answer:
-   answer.append(working[-1])
-  return answer
+ def register_keys(self, keys):
+  #Given a dict with keys of keystrokes and values of functions, registers all keystrokes
+  for k in keys:
+   self.register_key(k, keys[k])
+
+ def unregister_hotkeys(self):
+  for key in self.active_keys:
+   self.unregister_hotkey(k, self.active_keys[k])
 
