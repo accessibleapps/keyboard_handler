@@ -33,3 +33,21 @@ class KeyboardHandler(object):
    return
   return function()
 
+ @staticmethod
+ def standardize_key(key):
+  """Takes a keystroke and places it in a standard case and order in a list."""
+  working = key.split('+')
+  working = [i.lower() for i in working]
+  answer = []
+  if "control" in working:
+   answer.append("control")
+  if "win" in working:
+   answer.append("win")
+  if "alt" in working:
+   answer.append("alt")
+  if "shift" in working:
+   answer.append("shift")
+  if working[-1] not in answer:
+   answer.append(working[-1])
+  return answer
+
