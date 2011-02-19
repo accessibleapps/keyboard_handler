@@ -1,8 +1,9 @@
 import wx
 
 from windows import WindowsKeyboardHandler
+from main import KeyboardHandler
 
-__all__ = ['WXKeyboardHandler']
+__all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
 
 class WXKeyboardHandler(WindowsKeyboardHandler):
 
@@ -12,7 +13,7 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
   self.is_global = is_global
   self.key_ids = {}
 
- def register_key (self, key, function):
+ def register_key(self, key, function):
   super(WXKeyboardHandler, self).register_key(key, function)
   key_id = wx.NewId()
   parsed = self.parse_key(key)
@@ -31,8 +32,38 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
   evt.Skip()
   if not self.is_global and not self.parent.HasFocus():
    return
-  key = None
   for i in self.key_ids:
    if self.key_ids[i] == id:
     self.handle_key(i)
+
+class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
+
+ def __init__(self, *a, **k):
+  wx.StaticText.__init__(self, *a, **k)
+  KeyboardHandler.__init__(self)
+  self.wx_replacements = {}
+  for i in [d for d in dir(wx) if d.startswith('WXK_')]:
+   self.wx_replacements[getattr(wx, i)] = i[4:].lower()
+  self.Bind(wx.EVT_KEY_DOWN, self.process_key, self)
+  self.SetFocus()
+
+ def process_key(self, evt):
+  keycode = evt.GetKeyCode()
+  keyname = self.wx_replacements.get(keycode, None)
+  modifiers = ""
+  replacements = (   (evt.ControlDown(), 'control+'),
+   (evt.AltDown(),     'alt+'),
+   (evt.ShiftDown(),   'shift+'),
+   (evt.MetaDown(),    'win+')
+  )
+  for mod, ch in (replacements):
+   if mod:
+    modifiers += ch
+  if keyname is None:
+   if 27 < keycode < 256:
+    keyname = chr(keycode).lower()
+   else:
+    keyname = "(%s)unknown" % keycode
+  key = modifiers + keyname
+  self.handle_key(key)
 
