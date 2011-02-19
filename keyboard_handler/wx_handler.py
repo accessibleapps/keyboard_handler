@@ -7,10 +7,9 @@ __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
 
 class WXKeyboardHandler(WindowsKeyboardHandler):
 
- def __init__ (self, parent, is_global=False):
+ def __init__ (self, parent):
   super(WXKeyboardHandler, self).__init__()
   self.parent = parent
-  self.is_global = is_global
   self.key_ids = {}
 
  def register_key(self, key, function):
@@ -30,8 +29,6 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
 
  def process_key (self, evt, id):
   evt.Skip()
-  if not self.is_global and not self.parent.HasFocus():
-   return
   for i in self.key_ids:
    if self.key_ids[i] == id:
     self.handle_key(i)
