@@ -28,7 +28,7 @@ class KeyboardHandler(object):
 
  def unregister_all_keys(self):
   for key in self.active_keys:
-   self.unregister_key(k, self.active_keys[k])
+   self.unregister_key(key, self.active_keys[key])
 
  def handle_key (self, key):
   try:
