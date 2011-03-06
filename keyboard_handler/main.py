@@ -29,7 +29,7 @@ class KeyboardHandler(object):
 
 
  def unregister_all_keys(self):
-  for key in self.active_keys.iterkeys():
+  for key in list(self.active_keys):
    self.unregister_key(key, self.active_keys[key])
 
  def handle_key (self, key):
