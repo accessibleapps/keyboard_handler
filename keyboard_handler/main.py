@@ -43,8 +43,3 @@ class KeyboardHandler(object):
   #Given a dict with keys of keystrokes and values of functions, registers all keystrokes
   for k in keys:
    self.register_key(k, keys[k])
-
- def unregister_hotkeys(self):
-  for key in self.active_keys:
-   self.unregister_hotkey(k, self.active_keys[k])
-
