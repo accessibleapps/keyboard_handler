@@ -25,6 +25,8 @@ class KeyboardHandler(object):
     raise KeyboardHandlerError, "key %s is not registered to that function" % key
   except KeyError:
    raise KeyboardHandlerError, "Key %s not currently registered"
+  del(self.active_keys[key])
+
 
  def unregister_all_keys(self):
   for key in self.active_keys:
