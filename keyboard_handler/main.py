@@ -26,9 +26,9 @@ class KeyboardHandler(object):
   except KeyError:
    raise KeyboardHandlerError, "Key %s not currently registered"
 
- def unregister_hotkeys(self):
+ def unregister_all_keys(self):
   for key in self.active_keys:
-   self.unregister_hotkey(k, self.active_keys[k])
+   self.unregister_key(k, self.active_keys[k])
 
  def handle_key (self, key):
   try:
