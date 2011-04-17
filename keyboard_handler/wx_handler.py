@@ -33,7 +33,7 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
    if self.key_ids[i] == id:
     self.handle_key(i)
 
-class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
+class WXControlKeyboardHandler(wx.StaticText, WindowsKeyboardHandler):
 
  def __init__(self, parent=None, *a, **k):
   wx.StaticText.__init__(self, parent=parent)
