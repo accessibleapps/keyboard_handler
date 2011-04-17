@@ -1,10 +1,13 @@
 import platform
+import time
 
 class KeyboardHandlerError (Exception): pass
 
 class KeyboardHandler(object):
 
- def __init__(self):
+ def __init__(self, repeat_rate=0.0):
+  self.repeat_rate = repeat_rate #How long between accepting the same keystroke?
+  self._last_keypress_time = 0
   super(KeyboardHandler, self).__init__()
   self.active_keys = {}
   if not hasattr(self, 'replacement_mods'):
@@ -33,10 +36,14 @@ class KeyboardHandler(object):
    self.unregister_key(key, self.active_keys[key])
 
  def handle_key (self, key):
+  if self.repeat_rate and key == self._last_key and time.time() - self._last_keypress_time < self.repeat_rate:
+   return
   try:
    function = self.active_keys[key]
   except KeyError:
    return
+  self._last_key = key
+  self._last_keypress_time = time.time()
   return function()
 
  def register_keys(self, keys):
