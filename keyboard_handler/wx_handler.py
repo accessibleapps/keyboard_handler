@@ -7,8 +7,8 @@ __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
 
 class WXKeyboardHandler(WindowsKeyboardHandler):
 
- def __init__ (self, parent):
-  super(WXKeyboardHandler, self).__init__()
+ def __init__ (self, parent, *args, **kwargs):
+  super(WXKeyboardHandler, self).__init__(*args, **kwargs)
   self.parent = parent
   self.key_ids = {}
 
@@ -37,7 +37,7 @@ class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
 
  def __init__(self, *a, **k):
   wx.StaticText.__init__(self, *a, **k)
-  KeyboardHandler.__init__(self)
+  KeyboardHandler.__init__(self, *a, **k)
   self.wx_replacements = {}
   for i in [d for d in dir(wx) if d.startswith('WXK_')]:
    self.wx_replacements[getattr(wx, i)] = i[4:].lower()

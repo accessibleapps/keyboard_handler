@@ -5,10 +5,10 @@ class KeyboardHandlerError (Exception): pass
 
 class KeyboardHandler(object):
 
- def __init__(self, repeat_rate=0.0):
+ def __init__(self, repeat_rate=0.0, *args, **kwargs):
   self.repeat_rate = repeat_rate #How long between accepting the same keystroke?
   self._last_keypress_time = 0
-  super(KeyboardHandler, self).__init__()
+  super(KeyboardHandler, self).__init__(*args, **kwargs)
   self.active_keys = {}
   if not hasattr(self, 'replacement_mods'):
    self.replacement_mods = {}

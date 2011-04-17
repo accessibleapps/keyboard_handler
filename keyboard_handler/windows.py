@@ -5,8 +5,8 @@ from main import KeyboardHandler
 
 class WindowsKeyboardHandler(KeyboardHandler):
 
- def __init__ (self):
-  super(WindowsKeyboardHandler, self).__init__()
+ def __init__ (self, *args, **kwargs):
+  super(WindowsKeyboardHandler, self).__init__(*args, **kwargs)
   #Setup the replacement dictionaries.
   for i in dir(win32con):
    if i.startswith("VK_"):
