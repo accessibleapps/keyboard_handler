@@ -35,8 +35,8 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
 
 class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
 
- def __init__(self, *a, **k):
-  wx.StaticText.__init__(self, *a, **k)
+ def __init__(self, parent=None, *a, **k):
+  wx.StaticText.__init__(self, parent=parent)
   KeyboardHandler.__init__(self, *a, **k)
   self.wx_replacements = {}
   for i in [d for d in dir(wx) if d.startswith('WXK_')]:
