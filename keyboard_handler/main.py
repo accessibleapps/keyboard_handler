@@ -48,6 +48,12 @@ class KeyboardHandler(object):
   return function()
 
  def register_keys(self, keys):
-  #Given a dict with keys of keystrokes and values of functions, registers all keystrokes
+  """Given a dict with keys of keystrokes and values of functions, registers all keystrokes"""
   for k in keys:
    self.register_key(k, keys[k])
+
+ def unregister_keys(self, keys):
+  """Given a dict with keys of keystrokes and values of functions, unregisters all keystrokes"""
+  for k in keys:
+   self.unregister_key(k, keys[k])
+
