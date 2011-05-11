@@ -1,4 +1,5 @@
 import wx
+from windows import WindowsKeyboardHandler
 
 from main import KeyboardHandler
 
@@ -9,7 +10,6 @@ class BaseWXKeyboardHandler(KeyboardHandler):
  def __init__(self, *args, **kwargs):
   super(BaseWXKeyboardHandler, self).__init__(*args, **kwargs)
   #Setup the replacement dictionaries.
-
   for i in dir(wx):
    if i.startswith('WXK_'):
     key = i[4:].lower()
@@ -31,14 +31,16 @@ class BaseWXKeyboardHandler(KeyboardHandler):
    result = self.replacement_mods[key]
   elif key in self.replacement_keys:
    result = self.replacement_keys[key]
+   if result >= 277:
+    result -= 277
   elif len(key) == 1:
-   result = ord(key.upper())
+   result = ord(key.upper()) 
   print "result: ", result
   return result
 
 
 
-class WXKeyboardHandler(BaseWXKeyboardHandler):
+class WXKeyboardHandler(WindowsKeyboardHandler):
 
  def __init__ (self, parent, *args, **kwargs):
   super(WXKeyboardHandler, self).__init__(*args, **kwargs)
@@ -66,7 +68,7 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
    if self.key_ids[i] == id:
     self.handle_key(i)
 
-class WXControlKeyboardHandler(wx.StaticText, BaseWXKeyboardHandler):
+class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
 
  def __init__(self, parent=None, *a, **k):
   wx.StaticText.__init__(self, parent=parent)
