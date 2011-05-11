@@ -1,11 +1,41 @@
 import wx
 
-from windows import WindowsKeyboardHandler
 from main import KeyboardHandler
 
 __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
 
-class WXKeyboardHandler(WindowsKeyboardHandler):
+class BaseWXKeyboardHandler(KeyboardHandler):
+
+ def __init__(self, *args, **kwargs):
+  super(BaseWXKeyboardHandler, self).__init__(*args, **kwargs)
+  #Setup the replacement dictionaries.
+
+  for i in dir(wx):
+   if i.startswith('WXK_'):
+    key = i[4:].lower()
+    self.replacement_keys[key] = getattr(wx, i)
+   elif i.startswith('MOD_'):
+    key = i[4:].lower()
+    self.replacement_mods[key] = getattr(wx, i)
+
+ def parse_key (self, keystroke, separator="+"):
+  keystroke = [self.keycode_from_key(i) for i in keystroke.split(separator)]
+  mods = 0
+  for i in keystroke[:-1]:
+   mods = mods | i #or everything together
+  return (mods, keystroke[-1])
+
+ def keycode_from_key(self, key):
+  if key in self.replacement_mods:
+   return self.replacement_mods[key]
+  if key in self.replacement_keys:
+   return self.replacement_keys[key]
+  if len(key) == 1:
+   return ord(key.upper())
+
+
+
+class WXKeyboardHandler(BaseWXKeyboardHandler):
 
  def __init__ (self, parent, *args, **kwargs):
   super(WXKeyboardHandler, self).__init__(*args, **kwargs)
@@ -33,7 +63,7 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
    if self.key_ids[i] == id:
     self.handle_key(i)
 
-class WXControlKeyboardHandler(wx.StaticText, WindowsKeyboardHandler):
+class WXControlKeyboardHandler(wx.StaticText, BaseWXKeyboardHandler):
 
  def __init__(self, parent=None, *a, **k):
   wx.StaticText.__init__(self, parent=parent)
