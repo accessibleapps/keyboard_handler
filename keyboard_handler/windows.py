@@ -18,6 +18,7 @@ class WindowsKeyboardHandler(KeyboardHandler):
   self.replacement_keys .update(dict(pageup=win32con.VK_PRIOR, pagedown=win32con.VK_NEXT))
 
  def parse_key (self, keystroke, separator="+"):
+  keystroke = str(keystroke) #We don't want unicode
   keystroke = [self.keycode_from_key(i) for i in keystroke.split(separator)]
   mods = 0
   for i in keystroke[:-1]:
