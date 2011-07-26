@@ -31,7 +31,6 @@ class KeyboardHandler(object):
    raise KeyboardHandlerError, "Key %s not currently registered"
   del(self.active_keys[key])
 
-
  def unregister_all_keys(self):
   for key in list(self.active_keys):
    self.unregister_key(key, self.active_keys[key])
@@ -48,12 +47,42 @@ class KeyboardHandler(object):
   return function()
 
  def register_keys(self, keys):
-  """Given a dict with keys of keystrokes and values of functions, registers all keystrokes"""
+  """Given a mapping of keystrokes to functions, registers all keystrokes"""
   for k in keys:
    self.register_key(k, keys[k])
 
  def unregister_keys(self, keys):
-  """Given a dict with keys of keystrokes and values of functions, unregisters all keystrokes"""
+  """Given a mapping of keys to their functions, unregisters all provided keys."""
   for k in keys:
    self.unregister_key(k, keys[k])
 
+ def standardize_key(self, key):
+  """Takes a keystroke and places it in a standard case and order in a list."""
+  working = key.split('+')
+  working = [i.lower() for i in working]
+  answer = []
+  if "control" in working:
+   answer.append("control")
+  if "win" in working:
+   answer.append("win")
+  if "alt" in working:
+   answer.append("alt")
+  if "shift" in working:
+   answer.append("shift")
+  if working[-1] not in answer:
+   answer.append(working[-1])
+  return answer
+
+ def standardize_keymap(self, keymap):
+  """Given a keymap, returns the keymap standardized."""
+  full = {}
+  for i in keymap:
+   answer = ""
+   new = self.standardize_key(keymap[i])
+   for (c, j) in enumerate(new):
+    if c < len(new)-1:
+     answer = "%s%s+" % (answer, j)
+    else:
+     answer = "%s%s" % (answer, j)
+   full[i] = answer
+  return full
