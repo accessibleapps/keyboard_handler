@@ -26,7 +26,6 @@ class BaseWXKeyboardHandler(KeyboardHandler):
   return (mods, keystroke[-1])
 
  def keycode_from_key(self, key):
-  print "key: ", key
   if key in self.replacement_mods:
    result = self.replacement_mods[key]
   elif key in self.replacement_keys:
