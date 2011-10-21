@@ -63,7 +63,8 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
 
  def process_key (self, evt, id):
   evt.Skip()
-  for i in self.key_ids:
+  key_ids = self.key_ids.keys()
+  for i in key_ids:
    if self.key_ids[i] == id:
     self.handle_key(i)
 
