@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version__ = 0.51
+__version__ = 0.511
 
 setup(
 name = "Keyboard_Handler",
