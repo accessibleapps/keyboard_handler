@@ -56,16 +56,18 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
 
  def unregister_key (self, key, function):
   super(WXKeyboardHandler, self).unregister_key(key, function)
+  if key not in self.key_ids:
+   return #there's nothing we can do.
   key_id = self.key_ids[key]
-  answer = self.parent.UnregisterHotKey(key_id)
-  self.parent.Unbind(wx.EVT_HOTKEY, id=key_id)
-  del(self.key_ids[key])
+  self.parent.UnregisterHotKey(key_id)
+  self.parent.Unbind( wx.EVT_HOTKEY, id=key_id)
+  self.key_ids.pop(key)
 
  def process_key (self, evt, id):
   evt.Skip()
   key_ids = self.key_ids.keys()
   for i in key_ids:
-   if self.key_ids[i] == id:
+   if self.key_ids.get(i) == id:
     self.handle_key(i)
 
 class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
@@ -99,3 +101,6 @@ class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
   key = modifiers + keyname
   self.handle_key(key)
 
+
+BaseWXKeyboardHandler.register_key = lambda *a, **k: wx.CallAfter(BaseWXKeyboardHandler.register_key, *a, **k)
+BaseWXKeyboardHandler.unregister_key = lambda *a, **k: wx.CallAfter(BaseWXKeyboardHandler.unregister_key, *a, **k)
