@@ -1,9 +1,18 @@
+import functools
 import wx
 from windows import WindowsKeyboardHandler
 
 from main import KeyboardHandler
 
 __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
+
+
+def call_after(func):
+ def wrapper(*args, **kwargs):
+  wx.CallAfter(func, *args, **kwargs)
+ functools.update_wrapper(wrapper, func)
+ return wrapper
+
 
 class BaseWXKeyboardHandler(KeyboardHandler):
 
@@ -46,6 +55,7 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
   self.parent = parent
   self.key_ids = {}
 
+ @call_after
  def register_key(self, key, function):
   super(WXKeyboardHandler, self).register_key(key, function)
   key_id = wx.NewId()
@@ -54,6 +64,7 @@ class WXKeyboardHandler(WindowsKeyboardHandler):
   self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
   self.key_ids[key] = key_id
 
+ @call_after
  def unregister_key (self, key, function):
   super(WXKeyboardHandler, self).unregister_key(key, function)
   if key not in self.key_ids:
@@ -100,7 +111,3 @@ class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
     keyname = "(%s)unknown" % keycode
   key = modifiers + keyname
   self.handle_key(key)
-
-
-BaseWXKeyboardHandler.register_key = lambda *a, **k: wx.CallAfter(BaseWXKeyboardHandler.register_key, *a, **k)
-BaseWXKeyboardHandler.unregister_key = lambda *a, **k: wx.CallAfter(BaseWXKeyboardHandler.unregister_key, *a, **k)
