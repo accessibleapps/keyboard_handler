@@ -1,6 +1,5 @@
 import functools
 import wx
-from windows import WindowsKeyboardHandler
 
 from main import KeyboardHandler
 
@@ -48,38 +47,43 @@ class BaseWXKeyboardHandler(KeyboardHandler):
 
 
 
-class WXKeyboardHandler(WindowsKeyboardHandler):
+try:
+ from windows import WindowsKeyboardHandler
+ class WXKeyboardHandler(WindowsKeyboardHandler):
 
- def __init__ (self, parent, *args, **kwargs):
-  super(WXKeyboardHandler, self).__init__(*args, **kwargs)
-  self.parent = parent
-  self.key_ids = {}
+  def __init__ (self, parent, *args, **kwargs):
+   super(WXKeyboardHandler, self).__init__(*args, **kwargs)
+   self.parent = parent
+   self.key_ids = {}
 
- @call_after
- def register_key(self, key, function):
-  super(WXKeyboardHandler, self).register_key(key, function)
-  key_id = wx.NewId()
-  parsed = self.parse_key(key)
-  self.parent.RegisterHotKey(key_id, *parsed)
-  self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
-  self.key_ids[key] = key_id
+  @call_after
+  def register_key(self, key, function):
+   super(WXKeyboardHandler, self).register_key(key, function)
+   key_id = wx.NewId()
+   parsed = self.parse_key(key)
+   self.parent.RegisterHotKey(key_id, *parsed)
+   self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
+   self.key_ids[key] = key_id
 
- @call_after
- def unregister_key (self, key, function):
-  super(WXKeyboardHandler, self).unregister_key(key, function)
-  if key not in self.key_ids:
-   return #there's nothing we can do.
-  key_id = self.key_ids[key]
-  self.parent.UnregisterHotKey(key_id)
-  self.parent.Unbind( wx.EVT_HOTKEY, id=key_id)
-  self.key_ids.pop(key)
+  @call_after
+  def unregister_key (self, key, function):
+   super(WXKeyboardHandler, self).unregister_key(key, function)
+   if key not in self.key_ids:
+    return #there's nothing we can do.
+   key_id = self.key_ids[key]
+   self.parent.UnregisterHotKey(key_id)
+   self.parent.Unbind( wx.EVT_HOTKEY, id=key_id)
+   self.key_ids.pop(key)
 
- def process_key (self, evt, id):
-  evt.Skip()
-  key_ids = self.key_ids.keys()
-  for i in key_ids:
-   if self.key_ids.get(i) == id:
-    self.handle_key(i)
+  def process_key (self, evt, id):
+   evt.Skip()
+   key_ids = self.key_ids.keys()
+   for i in key_ids:
+    if self.key_ids.get(i) == id:
+     self.handle_key(i)
+
+except ImportError:
+ pass
 
 class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
 
