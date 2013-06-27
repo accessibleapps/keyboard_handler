@@ -1,7 +1,7 @@
 import platform
 if platform.system() == 'Linux':
  from linux import LinuxKeyboardHandler as GlobalKeyboardHandler
-elif platform.system() == 'Windows':
+else:
  from wx_handler import WXKeyboardHandler as GlobalKeyboardHandler
-elif platform.system() == 'Darwin':
- from osx import OSXKeyboardHandler as GlobalKeyboardHandler
+#elif platform.system() == 'Darwin':
+ #from osx import OSXKeyboardHandler as GlobalKeyboardHandler
