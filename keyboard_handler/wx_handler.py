@@ -2,9 +2,9 @@ import functools
 import wx
 
 from main import KeyboardHandler
+import key_constants
 
 __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
-
 
 def call_after(func):
  def wrapper(*args, **kwargs):
@@ -42,48 +42,60 @@ class BaseWXKeyboardHandler(KeyboardHandler):
     result -= 277
   elif len(key) == 1:
    result = ord(key.upper()) 
-  print "result: ", result
   return result
 
 
+ 
+class WXKeyboardHandler(BaseWXKeyboardHandler):
 
-try:
- from windows import WindowsKeyboardHandler
- class WXKeyboardHandler(WindowsKeyboardHandler):
+ def __init__ (self, parent, *args, **kwargs):
+  super(WXKeyboardHandler, self).__init__(*args, **kwargs)
+  self.parent = parent
+  self.key_ids = {}
+  self.replacement_keys = key_constants.keys
+  self.replacement_mods = key_constants.modifiers
 
-  def __init__ (self, parent, *args, **kwargs):
-   super(WXKeyboardHandler, self).__init__(*args, **kwargs)
-   self.parent = parent
-   self.key_ids = {}
+ @call_after
+ def register_key(self, key, function):
+  super(WXKeyboardHandler, self).register_key(key, function)
+  key_id = wx.NewId()
+  parsed = self.parse_key(key)
+  self.parent.RegisterHotKey(key_id, *parsed)
+  self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
+  self.key_ids[key] = key_id
 
-  @call_after
-  def register_key(self, key, function):
-   super(WXKeyboardHandler, self).register_key(key, function)
-   key_id = wx.NewId()
-   parsed = self.parse_key(key)
-   self.parent.RegisterHotKey(key_id, *parsed)
-   self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
-   self.key_ids[key] = key_id
+ def parse_key (self, keystroke, separator="+"):
+  keystroke = str(keystroke) #We don't want unicode
+  keystroke = [self.keycode_from_key(i) for i in keystroke.split(separator)]
+  mods = 0
+  for i in keystroke[:-1]:
+   mods = mods | i #or everything together
+  return (mods, keystroke[-1])
 
-  @call_after
-  def unregister_key (self, key, function):
-   super(WXKeyboardHandler, self).unregister_key(key, function)
-   if key not in self.key_ids:
-    return #there's nothing we can do.
-   key_id = self.key_ids[key]
-   self.parent.UnregisterHotKey(key_id)
-   self.parent.Unbind( wx.EVT_HOTKEY, id=key_id)
-   self.key_ids.pop(key)
+ def keycode_from_key(self, key):
+  if key in self.replacement_mods:
+   return self.replacement_mods[key]
+  if key in self.replacement_keys:
+   return self.replacement_keys[key]
 
-  def process_key (self, evt, id):
-   evt.Skip()
-   key_ids = self.key_ids.keys()
-   for i in key_ids:
-    if self.key_ids.get(i) == id:
-     self.handle_key(i)
 
-except ImportError:
- pass
+
+ @call_after
+ def unregister_key (self, key, function):
+  super(WXKeyboardHandler, self).unregister_key(key, function)
+  if key not in self.key_ids:
+   return #there's nothing we can do.
+  key_id = self.key_ids[key]
+  self.parent.UnregisterHotKey(key_id)
+  self.parent.Unbind( wx.EVT_HOTKEY, id=key_id)
+  self.key_ids.pop(key)
+
+ def process_key (self, evt, id):
+  evt.Skip()
+  key_ids = self.key_ids.keys()
+  for i in key_ids:
+   if self.key_ids.get(i) == id:
+    self.handle_key(i)
 
 class WXControlKeyboardHandler(wx.StaticText, KeyboardHandler):
 
