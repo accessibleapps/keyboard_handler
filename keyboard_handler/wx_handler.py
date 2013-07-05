@@ -72,14 +72,6 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
    mods = mods | i #or everything together
   return (mods, keystroke[-1])
 
- def keycode_from_key(self, key):
-  if key in self.replacement_mods:
-   return self.replacement_mods[key]
-  if key in self.replacement_keys:
-   return self.replacement_keys[key]
-
-
-
  @call_after
  def unregister_key (self, key, function):
   super(WXKeyboardHandler, self).unregister_key(key, function)
