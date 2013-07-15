@@ -28,7 +28,7 @@ class KeyboardHandler(object):
    if self.active_keys[key] != function:
     raise KeyboardHandlerError, "key %s is not registered to that function" % key
   except KeyError:
-   raise KeyboardHandlerError, "Key %s not currently registered"
+   raise KeyboardHandlerError, "Key %s not currently registered" % key
   del(self.active_keys[key])
 
  def unregister_all_keys(self):
