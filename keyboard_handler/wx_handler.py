@@ -1,7 +1,7 @@
 import functools
 import wx
 
-from main import KeyboardHandler
+from main import KeyboardHandler, KeyboardHandlerError
 import key_constants
 
 __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
@@ -34,6 +34,7 @@ class BaseWXKeyboardHandler(KeyboardHandler):
   return (mods, keystroke[-1])
 
  def keycode_from_key(self, key):
+  result = None
   if key in self.replacement_mods:
    result = self.replacement_mods[key]
   elif key in self.replacement_keys:
@@ -42,6 +43,8 @@ class BaseWXKeyboardHandler(KeyboardHandler):
     result -= 277
   elif len(key) == 1:
    result = ord(key.upper()) 
+  if result is None:
+   raise KeyboardHandlerError("Could not translate key %r into a valid keycode." % key)
   return result
 
 
