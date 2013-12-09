@@ -112,7 +112,14 @@ keys = {
  'volume_up': 175,
  'xbutton1': 5,
  'xbutton2': 6,
- 'zoom': 251}
+ 'zoom': 251,
+ '/': 191,
+ ';': 218,
+ '[': 219,
+ '\\': 220,
+ ']': 221,
+ '\'': 222,
+}
 
 modifiers = {'alt': 1, 'control': 2, 'shift': 4, 'win': 8}
 
