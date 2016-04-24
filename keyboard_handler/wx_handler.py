@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import functools
 import wx
 
-from main import KeyboardHandler, KeyboardHandlerError
-import key_constants
+from .main import KeyboardHandler, KeyboardHandlerError
+from . import key_constants
 
 __all__ = ['WXKeyboardHandler', 'WXControlKeyboardHandler']
 
