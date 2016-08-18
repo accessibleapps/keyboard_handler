@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 import functools
+import logging
+logger = logging.getLogger("keyboard_handler")
 import wx
 
 from .main import KeyboardHandler, KeyboardHandlerError
@@ -64,9 +66,12 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
   super(WXKeyboardHandler, self).register_key(key, function)
   key_id = wx.NewId()
   parsed = self.parse_key(key)
-  self.parent.RegisterHotKey(key_id, *parsed)
+  res = self.parent.RegisterHotKey(key_id, *parsed)
+  if not res:
+   logger.warn("Failed to register hotkey: %s for function %r", key, function)
   self.parent.Bind(wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id)
   self.key_ids[key] = key_id
+  return res
 
  def parse_key (self, keystroke, separator="+"):
   keystroke = str(keystroke) #We don't want unicode
