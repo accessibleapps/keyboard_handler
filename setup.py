@@ -8,4 +8,11 @@ setup(
     description="Hook global and local keystrokes on multiple platforms",
     author="Christopher Toth",
     packages=find_packages(),
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Programming Language :: Python",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: Software Development :: Libraries",
+    ],
 )
