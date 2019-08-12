@@ -8,6 +8,9 @@ setup(
     description="Hook global and local keystrokes on multiple platforms",
     author="Christopher Toth",
     packages=find_packages(),
+    extras_require={
+        ':sys_platform == "win32"': ["pywin32",],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
