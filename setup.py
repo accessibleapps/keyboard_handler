@@ -1,15 +1,19 @@
 from setuptools import setup, find_packages
 
+
 __version__ = 0.52
 
+
 setup(
-    name="Keyboard_Handler",
+    name="keyboard_handler",
     version=__version__,
     description="Hook global and local keystrokes on multiple platforms",
     author="Christopher Toth",
     packages=find_packages(),
     extras_require={
-        ':sys_platform == "win32"': ["pywin32",],
+        ':sys_platform == "win32"': [
+            "pywin32",
+        ],
     },
     classifiers=[
         "Development Status :: 4 - Beta",
