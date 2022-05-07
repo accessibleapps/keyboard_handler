@@ -1,4 +1,5 @@
-from main import KeyboardHandler
+from __future__ import absolute_import
+from .main import KeyboardHandler
 import threading
 import thread
 import pyatspi

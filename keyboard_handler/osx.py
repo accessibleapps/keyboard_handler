@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from AppKit import *
 from PyObjCTools import AppHelper
 from Carbon.CarbonEvt import RegisterEventHotKey, GetApplicationEventTarget
@@ -5,7 +6,7 @@ from Carbon.Events import cmdKey, controlKey
 import struct
 from threading import Thread
 
-from main import KeyboardHandler
+from .main import KeyboardHandler
 
 kEventHotKeyPressedSubtype = 6
 kEventHotKeyReleasedSubtype = 9
