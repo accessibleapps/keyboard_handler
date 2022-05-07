@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from cmath import log
 import functools
 import logging
 
@@ -75,6 +76,7 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
             wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id
         )
         self.key_ids[key] = key_id
+        logger  .debug("Registered hotkey: %s for function %r", key, function)
         return res
 
     def parse_key(self, keystroke, separator="+"):
@@ -94,6 +96,7 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
         self.parent.UnregisterHotKey(key_id)
         self.parent.Unbind(wx.EVT_HOTKEY, id=key_id)
         self.key_ids.pop(key)
+        logger.debug("Unregistered hotkey: %s for function %r", key, function)
 
     def process_key(self, evt, id):
         evt.Skip()
