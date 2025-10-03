@@ -76,7 +76,7 @@ class WXKeyboardHandler(BaseWXKeyboardHandler):
             wx.EVT_HOTKEY, lambda evt: self.process_key(evt, key_id), id=key_id
         )
         self.key_ids[key] = key_id
-        logger  .debug("Registered hotkey: %s for function %r", key, function)
+        logger.debug("Registered hotkey: %s for function %r", key, function)
         return res
 
     def parse_key(self, keystroke, separator="+"):
