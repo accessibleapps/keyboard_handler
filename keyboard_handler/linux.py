@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from .main import KeyboardHandler
 import threading
-import thread
 import pyatspi
 
 
@@ -48,7 +47,7 @@ def handler(e):
         k = chr(e.id)
     if (m, k) not in keys:
         return False
-    thread.start_new(keys[(m, k)], ())
+    threading.Thread(target=keys[(m, k)]).start()
     return True  # don't pass it on
 
 
