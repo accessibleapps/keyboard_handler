@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from AppKit import *
 from PyObjCTools import AppHelper
-from Carbon.CarbonEvt import RegisterEventHotKey, GetApplicationEventTarget
+from Carbon.CarbonEvt import RegisterEventHotKey, UnregisterEventHotKey, GetApplicationEventTarget
 from Carbon.Events import cmdKey, controlKey
 import struct
 from threading import Thread
@@ -16,6 +16,7 @@ class OSXKeyboardHandler(KeyboardHandler):
     def __init__(self):
         super(OSXKeyboardHandler, self).__init__()
         self.replacement_keys = dict()
+        self.key_ids = {}
         self.app = KeyboardCapturingNSApplication.alloc().init()
         self._event_thread = Thread(target=AppHelper.runEventLoop)
         self._event_thread.start()
@@ -29,7 +30,8 @@ class OSXKeyboardHandler(KeyboardHandler):
     def unregister_key(self, key, function):
         super(OSXKeyboardHandler, self).unregister_key(key, function)
         key_id = self.key_ids[key]
-        raise NotImplementedError
+        UnregisterEventHotKey(key_id)
+        del self.key_ids[key]
 
     def parse_key(self, key):
         key = key.split("+")
