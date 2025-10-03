@@ -1,58 +1,63 @@
-## Introduction
+# Keyboard Handler
 
-Keyboard Handler allows you to register global hotkeys on multiple platforms, in addition to implementing a flexible parsing system.
+Cross-platform global hotkey handler for Python with human-readable key parsing.
 
-## WXKeyboardHandler
+## Platform Support
 
-This can be used in an WX application:
+- **Windows**: WX-based via `wx.RegisterHotKey()` or direct via pywin32
+- **Linux**: AT-SPI via pyatspi
+- **macOS**: Carbon/AppKit (partial support)
 
-### Initializing the handler
+## Installation
+
+```bash
+pip install keyboard_handler
+# Windows only:
+pip install keyboard_handler[':sys_platform == "win32"']
+```
+
+## Usage
+
+### WXKeyboardHandler
 
 ```python
 from keyboard_handler.wx_handler import WXKeyboardHandler
+
 handler = WXKeyboardHandler(parent)
-```
 
-### Registering a global hotkey
-
-```python
-try:
-	key = handler.register_key(key, function)
-except keyboard_handler.KeyboardHandlerError:
-	handle parse error
-```
-
-Keys can be parsed in a human-readable format, perfect for config files.
-
-```python
+# Register a hotkey
 handler.register_key("control+t", self.display_time)
-handler.register_key("control+windows+w", self.do_something_else)
-```
+handler.register_key("control+win+w", self.do_something_else)
 
-You can register keys in bulk given a mapping.
-
-```python
-mapping = {"control+w": self.close_window, "alt+f4": self.close_all}
+# Register multiple hotkeys
+mapping = {
+    "control+w": self.close_window,
+    "alt+f4": self.close_all
+}
 handler.register_keys(mapping)
-```
 
-### Unregistering a global hotkey
-
-```python
+# Unregister
 handler.unregister_key("control+t", self.display_time)
-handler.unregister_key("control+windows+w", self.do_something_else)
-```
-
-or to unregister a mapping:
-
-```python
-mapping = {"control+w": self.close_window, "alt+f4": self.close_all}
 handler.unregister_keys(mapping)
-```
-
-or to unregister everything:
-
-```python
 handler.unregister_all_keys()
 ```
+
+### Error Handling
+
+```python
+from keyboard_handler import KeyboardHandlerError
+
+try:
+    handler.register_key("control+t", callback)
+except KeyboardHandlerError:
+    # Key already registered or parse error
+    pass
+```
+
+### Key Format
+
+Keys use `+` to separate modifiers from the main key:
+
+- Modifiers: `control`, `shift`, `alt`, `win` (or `windows`)
+- Examples: `"control+t"`, `"shift+alt+f1"`, `"control+win+delete"`
 
