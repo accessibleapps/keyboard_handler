@@ -11,10 +11,10 @@ Cross-platform global hotkey handler for Python with human-readable key parsing.
 ## Installation
 
 ```bash
-pip install keyboard_handler
-# Windows only:
-pip install keyboard_handler[':sys_platform == "win32"']
+pip install git+https://github.com/accessibleapps/keyboard_handler.git
 ```
+
+It isn't on PyPI, so install it from GitHub. On Windows, pywin32 is installed automatically.
 
 ## Usage
 
